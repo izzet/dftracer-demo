@@ -32,3 +32,14 @@ A demo to run dftracer with different workloads.
 - Understanding different I/O patterns in HPC workloads
 - Analyzing trace data to identify performance bottlenecks
 - Using DFAnalyzer for visualization and insights
+
+## License
+
+DFTracer Demo is distributed under the terms of the MIT license.
+All new contributions must be made under this license.
+
+See [LICENSE](LICENSE) and [NOTICE](NOTICE) for details.
+
+SPDX-License-Identifier: MIT
+
+LLNL-CODE-2024514 — Applied Storage Research (ASR)
