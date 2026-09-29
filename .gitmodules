@@ -1,0 +1,6 @@
+[submodule "software/ior"]
+	path = software/ior
+	url = https://github.com/hpc/ior.git
+[submodule "software/dlio_benchmark"]
+	path = software/dlio_benchmark
+	url = https://github.com/argonne-lcf/dlio_benchmark.git
