@@ -7,6 +7,7 @@ log() {
 }
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
 log "Current script directory: $SCRIPT_DIR"
 
 log "Loading modules..."
@@ -18,14 +19,10 @@ python -m venv ./install
 log "Upgrading pip in the virtual environment..."
 ./install/bin/python -m pip install --upgrade pip
 
+log "Fetching IOR and DLIO benchmark sources..."
+git -C "${SCRIPT_DIR}" submodule update --init software/ior software/dlio_benchmark
+
 log "Building and installing IOR..."
-if [ ! -d "${SCRIPT_DIR}/software/ior" ]; then
-    log "Cloning IOR repository..."
-    git clone https://github.com/hpc/ior.git "${SCRIPT_DIR}/software/ior"
-    cd "${SCRIPT_DIR}/software/ior"
-    git checkout tags/4.0.0 -b v4.0.0
-    cd -
-fi
 cd software/ior
 ./bootstrap
 ./configure --prefix=${SCRIPT_DIR}/install
@@ -33,18 +30,13 @@ make
 make install
 cd -
 
-log "Building and installing DLIO benchmark..."
-if [ ! -d "${SCRIPT_DIR}/software/dlio_benchmark" ]; then
-    log "Cloning DLIO benchmark repository..."
-    git clone https://github.com/argonne-lcf/dlio_benchmark.git "${SCRIPT_DIR}/software/dlio_benchmark"
-fi
-
 log "Activating Python virtual environment..."
 source ./install/bin/activate
 
 
 log "Installing Python requirements..."
-pip install -r requirements.txt
+# Include DFTracer's preload library in the installed wheel for the IOR demo.
+DFTRACER_WHEEL=1 pip install --no-cache-dir -r requirements.txt
 
 export CC=$(which mpicc)
 export CXX=$(which mpic++)
